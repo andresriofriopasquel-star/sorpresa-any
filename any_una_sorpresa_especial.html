@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Para Any ❤️ Un regalo especial</title>
+    
+    <!-- Google Fonts: Cormorant Garamond (Serif), Caveat (Handwritten), Lora (Readable Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: {
+                            50: '#fdfbf7',
+                            100: '#faf6f0',
+                            200: '#f5efe6',
+                            300: '#ebdcd0',
+                        },
+                        charcoal: {
+                            DEFAULT: '#2c2724',
+                            light: '#4a433f',
+                        },
+                        terracotta: {
+                            DEFAULT: '#8b3a3a',
+                            light: '#9e4747',
+                            dark: '#6e2b2b'
+                        },
+                        beige: '#ede4d8'
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        hand: ['"Caveat"', 'cursive'],
+                        body: ['"Lora"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Paper Background Effect */
+        body {
+            background-color: #faf6f0;
+            background-image: radial-gradient(#e3d7c5 0.75px, transparent 0.75px), radial-gradient(#e3d7c5 0.75px, #faf6f0 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            color: #2c2724;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Washi Tape Styles */
+        .washi-tape {
+            background-color: rgba(243, 230, 211, 0.75);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            backdrop-filter: blur(2px);
+            border-left: 2px dashed rgba(210, 190, 160, 0.5);
+            border-right: 2px dashed rgba(210, 190, 160, 0.5);
+        }
+
+        .washi-tape-rose {
+            background-color: rgba(220, 180, 180, 0.65);
+            border-left: 2px dashed rgba(180, 140, 140, 0.5);
+            border-right: 2px dashed rgba(180, 140, 140, 0.5);
+        }
+
+        /* Polaroid Shadow & Border Effects */
+        .polaroid-card {
+            background: #fffdfa;
+            box-shadow: 0 8px 25px -5px rgba(60, 40, 30, 0.08), 0 4px 10px -2px rgba(60, 40, 30, 0.04);
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s ease;
+        }
+
+        .polaroid-card:hover {
+            transform: translateY(-4px) rotate(0deg) scale(1.01) !important;
+            box-shadow: 0 15px 30px -5px rgba(60, 40, 30, 0.12);
+        }
+
+        /* Torn Paper Edge for Letter */
+        .paper-letter {
+            background: #fdfbf7;
+            box-shadow: 0 10px 40px rgba(44, 39, 36, 0.08), 0 1px 3px rgba(0,0,0,0.05);
+            position: relative;
+            background-image: linear-gradient(#f0e8dc 1px, transparent 1px);
+            background-size: 100% 2.2rem;
+            line-height: 2.2rem;
+        }
+
+        /* Reveal Animation Utility Classes */
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(35px) scale(0.98);
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        .reveal-item.active {
+            opacity: 1;
+            transform: translateY(0) scale(1) rotate(var(--tilt-angle, 0deg));
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #faf6f0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d8c8b8;
+            border-radius: 3px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal-item {
+                transition: opacity 0.5s ease;
+                transform: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="font-body selection:bg-terracotta/20 selection:text-terracotta-dark min-h-screen relative antialiased">
+
+    <!-- Audio Floating Action Button -->
+    <div class="fixed bottom-5 right-5 z-50">
+        <button id="audioToggleBtn" aria-label="Reproducir o pausar música de fondo" 
+            class="w-12 h-12 rounded-full bg-cream-100/90 border border-terracotta/30 text-terracotta shadow-lg backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-none">
+            <span id="audioIcon" class="text-xl select-none">♫</span>
+        </button>
+    </div>
+
+    <!-- Hidden Audio Element -->
+    <audio id="bgAudio" loop preload="auto"></audio>
+
+    <!-- MAIN STORY CONTAINER -->
+    <main class="max-w-md mx-auto px-4 sm:px-6 py-6 flex flex-col items-center">
+
+        <!-- PANTALLA 1: BIENVENIDA -->
+        <section class="min-h-[90vh] w-full flex flex-col justify-between items-center py-12 text-center relative select-none">
+            
+            <!-- Hand-drawn SVG Accents (Top) -->
+            <div class="w-full flex justify-between items-center px-4 pt-4 opacity-60">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="text-terracotta stroke-current stroke-1">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-charcoal/40 stroke-current stroke-1">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                </svg>
+            </div>
+
+            <!-- Central Welcome Title -->
+            <div class="my-auto space-y-3 px-2">
+                <span class="font-hand text-2xl text-terracotta tracking-widest block opacity-90" id="welcomeSubtitle">
+                    <!-- Dynamic Subtitle -->
+                </span>
+                <h1 class="font-serif text-6xl sm:text-7xl font-normal tracking-wide text-charcoal leading-tight" id="welcomeName">
+                    <!-- Dynamic Name -->
+                </h1>
+                <div class="w-12 h-[1px] bg-terracotta/40 mx-auto my-4"></div>
+                <p class="font-hand text-xl text-charcoal/70 italic">Te amo mucho vida mía</p>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="flex flex-col items-center space-y-2 pb-6 opacity-75 animate-bounce">
+                <span class="font-hand text-lg text-charcoal/80 tracking-wide">desliza para descubrir</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-terracotta">
+                    <path d="M12 5v14M19 12l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </section>
+
+
+        <!-- PANTALLA 2 & MOMENTOS: FOTOGRAFÍAS TIPO POLAROID CON SCRAPBOOK -->
+        <section class="w-full space-y-16 py-8">
+            
+            <div class="text-center space-y-1 my-6 opacity-80">
+                <span class="font-hand text-xl text-terracotta">Pequeños fragmentos</span>
+                <h2 class="font-serif text-2xl text-charcoal tracking-wide">Nuestros Recuerdos</h2>
+            </div>
+
+            <!-- PHOTO 1 -->
+            <div class="reveal-item relative w-full max-w-[320px] mx-auto" style="--tilt-angle: -2.5deg;">
+                <!-- Decorative Washi Tape -->
+                <div class="washi-tape absolute -top-3 left-1/2 -translate-x-1/2 w-28 h-6 z-10 rotate-[-1deg]"></div>
+                <!-- Polaroid Container -->
+                <div class="polaroid-card p-4 pb-6 rounded-sm border border-black/5">
+                    <div class="aspect-[4/5] w-full overflow-hidden bg-beige/40 rounded-sm mb-4 relative">
+                        <img id="img01" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Recuerdo 1">
+                    </div>
+                    <p id="txt01" class="font-hand text-2xl text-center text-charcoal/90 leading-snug px-1"></p>
+                </div>
+            </div>
+
+            <!-- PHOTO 2 -->
+            <div class="reveal-item relative w-full max-w-[320px] mx-auto" style="--tilt-angle: 2deg;">
+                <!-- Decorative Washi Tape Rose -->
+                <div class="washi-tape-rose absolute -top-3 right-6 w-24 h-6 z-10 rotate-[3deg]"></div>
+                <div class="polaroid-card p-4 pb-6 rounded-sm border border-black/5">
+                    <div class="aspect-[4/5] w-full overflow-hidden bg-beige/40 rounded-sm mb-4">
+                        <img id="img02" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Recuerdo 2">
+                    </div>
+                    <p id="txt02" class="font-hand text-2xl text-center text-charcoal/90 leading-snug px-1"></p>
+                </div>
+            </div>
+
+            <!-- PHOTO 3 -->
+            <div class="reveal-item relative w-full max-w-[320px] mx-auto" style="--tilt-angle: -1.8deg;">
+                <div class="washi-tape absolute -top-3 left-6 w-24 h-6 z-10 rotate-[-2deg]"></div>
+                <div class="polaroid-card p-4 pb-6 rounded-sm border border-black/5">
+                    <div class="aspect-[4/5] w-full overflow-hidden bg-beige/40 rounded-sm mb-4">
+                        <img id="img03" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Recuerdo 3">
+                    </div>
+                    <p id="txt03" class="font-hand text-2xl text-center text-charcoal/90 leading-snug px-1"></p>
+                </div>
+            </div>
+
+            <!-- Decorative Doodle Divider -->
+            <div class="w-full flex justify-center items-center my-6 opacity-40">
+                <svg width="120" height="20" viewBox="0 0 120 20" fill="none" class="stroke-terracotta">
+                    <path d="M10 10 Q 30 18, 60 10 T 110 10" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                    <circle cx="60" cy="10" r="3" fill="#8b3a3a"/>
+                </svg>
+            </div>
+
+            <!-- PHOTO 4 -->
+            <div class="reveal-item relative w-full max-w-[320px] mx-auto" style="--tilt-angle: 2.2deg;">
+                <div class="washi-tape-rose absolute -top-3 left-1/2 -translate-x-1/2 w-28 h-6 z-10 rotate-[1deg]"></div>
+                <div class="polaroid-card p-4 pb-6 rounded-sm border border-black/5">
+                    <div class="aspect-[4/5] w-full overflow-hidden bg-beige/40 rounded-sm mb-4">
+                        <img id="img04" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Recuerdo 4">
+                    </div>
+                    <p id="txt04" class="font-hand text-2xl text-center text-charcoal/90 leading-snug px-1"></p>
+                </div>
+            </div>
+
+            <!-- PHOTO 5 -->
+            <div class="reveal-item relative w-full max-w-[320px] mx-auto" style="--tilt-angle: -2deg;">
+                <div class="washi-tape absolute -top-3 right-8 w-24 h-6 z-10 rotate-[-3deg]"></div>
+                <div class="polaroid-card p-4 pb-6 rounded-sm border border-black/5">
+                    <div class="aspect-[4/5] w-full overflow-hidden bg-beige/40 rounded-sm mb-4">
+                        <img id="img05" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Recuerdo 5">
+                    </div>
+                    <p id="txt05" class="font-hand text-2xl text-center text-charcoal/90 leading-snug px-1"></p>
+                </div>
+            </div>
+
+            <!-- PHOTO 6 -->
+            <div class="reveal-item relative w-full max-w-[320px] mx-auto" style="--tilt-angle: 1.5deg;">
+                <div class="washi-tape-rose absolute -top-3 left-8 w-24 h-6 z-10 rotate-[2deg]"></div>
+                <div class="polaroid-card p-4 pb-6 rounded-sm border border-black/5">
+                    <div class="aspect-[4/5] w-full overflow-hidden bg-beige/40 rounded-sm mb-4">
+                        <img id="img06" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Recuerdo 6">
+                    </div>
+                    <p id="txt06" class="font-hand text-2xl text-center text-charcoal/90 leading-snug px-1"></p>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- SECCIÓN DE LA CARTA -->
+        <section class="w-full py-16">
+            <div class="reveal-item paper-letter w-full p-6 sm:p-8 rounded-sm my-6 border border-terracotta/10 relative" style="--tilt-angle: 0deg;">
+                
+                <!-- Wax Seal Accent -->
+                <div class="absolute -top-6 right-6 w-12 h-12 rounded-full bg-terracotta-dark shadow-md flex items-center justify-center text-cream-100 font-serif text-lg font-bold border-2 border-terracotta/40 select-none">
+                    ♥
+                </div>
+
+                <!-- Letter Header -->
+                <div class="pt-2 mb-6">
+                    <h3 class="font-serif text-3xl text-charcoal font-normal" id="letterHeader">Para Any</h3>
+                    <p class="font-hand text-2xl text-terracotta font-semibold" id="letterSubheader">Feliz cumpleaños ❤️</p>
+                </div>
+
+                <!-- Letter Body Message -->
+                <div id="letterBody" class="font-body text-charcoal/90 text-base leading-relaxed space-y-4 whitespace-pre-line pt-2">
+                    <!-- Dynamic Letter Content -->
+                </div>
+
+                <!-- Hand drawn Heart Seal Bottom -->
+                <div class="mt-8 text-right pr-2">
+                    <span class="font-hand text-3xl text-terracotta">Con todo mi cariño, Andrés</span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SECCIÓN FINAL -->
+        <section class="w-full text-center space-y-10 py-12">
+            
+            <div class="space-y-2">
+                <span class="font-hand text-2xl text-terracotta block">Y esto es solo un pequeño recuerdo...</span>
+                <h3 class="font-serif text-3xl text-charcoal font-normal">Por muchos momentos más ❤️</h3>
+            </div>
+
+            <!-- FINAL PHOTO -->
+            <div class="reveal-item relative w-full max-w-[340px] mx-auto my-6" style="--tilt-angle: 0deg;">
+                <div class="washi-tape absolute -top-3 left-1/2 -translate-x-1/2 w-32 h-6 z-10"></div>
+                <div class="polaroid-card p-4 pb-6 rounded-sm border border-black/5">
+                    <div class="aspect-[4/5] w-full overflow-hidden bg-beige/40 rounded-sm mb-3">
+                        <img id="imgFinal" loading="lazy" class="w-full h-full object-cover" alt="Fotografía Final">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final Message -->
+            <div class="space-y-4 pt-4 px-2">
+                <p id="finalMessage" class="font-serif text-xl italic text-charcoal/90 leading-relaxed max-w-xs mx-auto">
+                    <!-- Dynamic Final Message -->
+                </p>
+            </div>
+
+            <!-- Heart Icon Decor -->
+            <div class="pt-6">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" class="mx-auto text-terracotta stroke-current stroke-1 animate-pulse">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+            </div>
+
+            <!-- Final End Card -->
+            <div class="pt-12 pb-16 space-y-2 border-t border-terracotta/10">
+                <p class="font-serif text-lg text-charcoal/70 tracking-wide">Fin de esta pequeña sorpresa.</p>
+                <p class="font-hand text-2xl text-terracotta">Pero no de nuestra historia.</p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        /* ===================================================================
+         * CONFIGURACIÓN / PERSONALIZACIÓN
+         * Edita estos valores fácilmente para personalizar toda la sorpresa.
+         * =================================================================== */
+        const CONFIG = {
+            NAME: "Any",
+            SUBTITLE: "Feliz cumpleaños...",
+            
+            // Textos de las fotografías
+            PHOTO_01_TEXT: "Un recuerdo que siempre me hace sonreír.",
+            PHOTO_02_TEXT: "Uno de tantos momentos que guardo.",
+            PHOTO_03_TEXT: "Tu risa ilumina cualquier día.",
+            PHOTO_04_TEXT: "Y pensar que todavía faltan muchos por vivir.",
+            PHOTO_05_TEXT: "Gracias por estar siempre cerca.",
+            PHOTO_06_TEXT: "Cada instante a tu lado cuenta.",
+
+            // Mensaje principal de la carta
+            MAIN_MESSAGE: `Hoy es un día muy especial y quería prepararte algo distinto, algo digno para la princesa de mi corazón.
+
+A veces la vida avanza rápido, pero detenerse a mirar los momentos que hemos compartido juntos me recuerda lo bonito que es estar contigo. Gracias por todo lo que me das y por la alegría que aportas siempre.
+
+Deseo de corazón que este nuevo año de vida venga lleno de alegrías, abrazos y besos interminables.
+
+¡Feliz Cumpleaños Amor! Que hoy y siempre seas muy feliz. ❤️`,
+
+            // Frase final
+            FINAL_MESSAGE: "Gracias por existir y por hacer cada día el mejor de todos.",
+
+            // Rutas de archivos de imagen y audio
+            // Puedes usar rutas relativas locales como 'images/photo01.jpg' o URLs externas
+            PHOTO_01: "images/photo01.jpg",
+            PHOTO_02: "images/photo02.jpg",
+            PHOTO_03: "images/photo03.jpg",
+            PHOTO_04: "images/photo04.jpg",
+            PHOTO_05: "images/photo05.jpg",
+            PHOTO_06: "images/photo06.jpg",
+            PHOTO_FINAL: "images/final.jpg",
+            
+            MUSIC_FILE: "audio/music.mp3"
+        };
+
+        /* ===================================================================
+         * SVG PLACEHOLDERS (Respaldo por si aún no existen las imágenes locales)
+         * =================================================================== */
+        function getSvgPlaceholder(text) {
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="500" viewBox="0 0 400 500">
+                <rect width="400" height="500" fill="#f3ece0"/>
+                <circle cx="200" cy="220" r="70" fill="#e2d4c0"/>
+                <path d="M120 380 Q 200 300 280 380" stroke="#d5c3aa" stroke-width="20" fill="none" stroke-linecap="round"/>
+                <text x="50%" y="450" font-family="'Cormorant Garamond', serif" font-size="22" fill="#8b3a3a" text-anchor="middle" italic="true">${text}</text>
+            </svg>`;
+            return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Inyectar valores de configuración en el DOM
+            document.getElementById('welcomeName').textContent = CONFIG.NAME;
+            document.getElementById('welcomeSubtitle').textContent = CONFIG.SUBTITLE;
+            document.getElementById('letterHeader').textContent = `Para ${CONFIG.NAME}`;
+            document.getElementById('letterBody').textContent = CONFIG.MAIN_MESSAGE;
+            document.getElementById('finalMessage').textContent = `"${CONFIG.FINAL_MESSAGE}"`;
+
+            // Configurar imágenes con fallback a SVG estetico si no cargan
+            const setPhoto = (imgId, src, fallbackText) => {
+                const img = document.getElementById(imgId);
+                img.src = src;
+                img.onerror = () => {
+                    img.src = getSvgPlaceholder(fallbackText);
+                };
+            };
+
+            setPhoto('img01', CONFIG.PHOTO_01, 'Recuerdo 01');
+            setPhoto('img02', CONFIG.PHOTO_02, 'Recuerdo 02');
+            setPhoto('img03', CONFIG.PHOTO_03, 'Recuerdo 03');
+            setPhoto('img04', CONFIG.PHOTO_04, 'Recuerdo 04');
+            setPhoto('img05', CONFIG.PHOTO_05, 'Recuerdo 05');
+            setPhoto('img06', CONFIG.PHOTO_06, 'Recuerdo 06');
+            setPhoto('imgFinal', CONFIG.PHOTO_FINAL, 'Foto Final');
+
+            // Configurar pies de foto
+            document.getElementById('txt01').textContent = CONFIG.PHOTO_01_TEXT;
+            document.getElementById('txt02').textContent = CONFIG.PHOTO_02_TEXT;
+            document.getElementById('txt03').textContent = CONFIG.PHOTO_03_TEXT;
+            document.getElementById('txt04').textContent = CONFIG.PHOTO_04_TEXT;
+            document.getElementById('txt05').textContent = CONFIG.PHOTO_05_TEXT;
+            document.getElementById('txt06').textContent = CONFIG.PHOTO_06_TEXT;
+
+            // 2. IntersectionObserver para animaciones suaves al hacer scroll
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px 0px -60px 0px',
+                threshold: 0.15
+            };
+
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // Ejecutar la animación una sola vez
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal-item').forEach(el => {
+                revealObserver.observe(el);
+            });
+
+            // 3. Control de Audio Ambiental
+            const bgAudio = document.getElementById('bgAudio');
+            const audioToggleBtn = document.getElementById('audioToggleBtn');
+            const audioIcon = document.getElementById('audioIcon');
+            let isPlaying = false;
+
+            bgAudio.src = CONFIG.MUSIC_FILE;
+
+            const toggleAudio = () => {
+                if (isPlaying) {
+                    bgAudio.pause();
+                    audioIcon.textContent = '♫';
+                    audioToggleBtn.classList.remove('ring-2', 'ring-terracotta');
+                    isPlaying = false;
+                } else {
+                    bgAudio.play().then(() => {
+                        audioIcon.textContent = '⏸';
+                        audioToggleBtn.classList.add('ring-2', 'ring-terracotta');
+                        isPlaying = true;
+                    }).catch(err => {
+                        console.log("El navegador requiere interacción previa para audio:", err);
+                    });
+                }
+            };
+
+            audioToggleBtn.addEventListener('click', toggleAudio);
+
+            // Intento opcional de inicio al interactuar por primera vez con el scroll o tap
+            const handleFirstInteraction = () => {
+                if (!isPlaying && bgAudio.src) {
+                    bgAudio.play().then(() => {
+                        audioIcon.textContent = '⏸';
+                        audioToggleBtn.classList.add('ring-2', 'ring-terracotta');
+                        isPlaying = true;
+                    }).catch(() => {});
+                }
+                document.removeEventListener('touchstart', handleFirstInteraction);
+                document.removeEventListener('click', handleFirstInteraction);
+            };
+
+            document.addEventListener('touchstart', handleFirstInteraction, { once: true });
+            document.addEventListener('click', handleFirstInteraction, { once: true });
+        });
+    </script>
+</body>
+</html>
